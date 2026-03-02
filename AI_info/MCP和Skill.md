@@ -47,8 +47,6 @@ Browser Tools: https://github.com/AgentDeskAI/browser-tools-mcp
 npx @agentdeskai/browser-tools-server@latest
 ```
 
-​      
-
 文件系统：操作本地文件
 
 Playright: 来自微软，方便控制浏览器

@@ -33,4 +33,36 @@ graph TD
     Repo -.->|返回源码内容| Task1
 ```
 
-### 规范：
+### MCP推荐 
+
+我是在vs code中添加配置，先安装cline，然后搜索安装mcp，你也可以在cursor中配置，配置文件格式相同
+
+GitHub：操作github
+
+Browser Tools: https://github.com/AgentDeskAI/browser-tools-mcp
+
+   安装chrome插件，server列表配置npx方式，然后执行npx命令， 就可以分析浏览器组件
+
+```
+npx @agentdeskai/browser-tools-server@latest
+```
+
+​      
+
+文件系统：操作本地文件
+
+Playright: 来自微软，方便控制浏览器
+
+Fetch：网页抓取，解析
+
+Apple或map_windows：便于和系统应用交互，可以写邮件，发短信，记日记
+
+HotNew： 热搜新闻聚合
+
+还有数据库的mcp，高德mcp等
+
+
+
+### MCP资源
+
+腾讯云插件中心，百度MCP 广场,  阿里魔搭社区MCP广场

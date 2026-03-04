@@ -39,24 +39,7 @@ claude
 
 然后会让你确认当前目录是否安全可用，如果是你的工作目录，就回车，否则退出，切换你的目录，然后重新执行claude
 
-我因为是试用期，所以没有配置key，后续购买key之后再完善这一部分，TODO
-
-网上的说是需要更新%userprofile% \ .claude \settings.json, 待验证
-
-```
-{
-  "env": {
-    "ANTHROPIC_AUTH_TOKEN": "你的令牌",
-    "ANTHROPIC_BASE_URL": "https://api.zhangsan.cool",
-    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "claude-sonnet-4-5-20250929",
-    "ANTHROPIC_DEFAULT_OPUS_MODEL": "claude-sonnet-4-5-20250929",
-    "ANTHROPIC_DEFAULT_SONNET_MODEL": "claude-sonnet-4-5-20250929",
-    "ANTHROPIC_MODEL": "claude-sonnet-4-5-20250929"
-  },
-  "includeCoAuthoredBy": false
-}
-
-```
+执行/login, 我买了一个pro，所以选择第一个，跳网页授权，成功，返回即可。
 
 然后出现欢迎页面，开始项目了，
 
@@ -72,6 +55,8 @@ claude
 - **Ask（询问）**：只看不动
 - **Plan（规划）**：只规划，不执行
 - **Edit（编辑）**：直接执行
+
+马上就会支持语音交互了，闹心等待中,,     **/voice**
 
 终端执行其实不用手动切换，Claude 会自动切换，在 VS Code 插件中可以手动切换模式
 
@@ -93,95 +78,59 @@ claude
 
 ### 初始化项目
 
+```
+cd ~/projects
+claude
+```
+
+做一下描述，让claude创建一个项目，让claude创建项目文件结构, 例如：
+
+```
+创建以下文件夹结构：
+docs/
+src/
+  components/
+  utils/
+```
+
 `/init`新项目一键生成 CLAUDE.md
 
-然后安装必要的
-
-
-
-### 配置模板参考：everything-claude-code
+然后安装必要的MCP和插件(plugin)
 
 ```
-# 添加市场
-/plugin marketplace add affaan-m/everything-claude-code
-# 安装插件
-/plugin install everything-claude-code@everything-claude-code
+/plugin， 查看选择安装插件: github，superpowers，pinecone，
 ```
 
-或者直接添加到你的 `~/.claude/settings.json`：
+github还需要做一些配置
 
 ```
-{
-  "extraKnownMarketplaces": {
-    "everything-claude-code": {
-      "source": {
-        "source": "github",
-        "repo": "affaan-m/everything-claude-code"
-      }
-    }
-  },
-  "enabledPlugins": {
-    "everything-claude-code@everything-claude-code": true
-  }
-}
+/install-github-app
 ```
 
-Claude Code 插件系统不支持通过插件分发 `rules`。你需要手动安装规则：
-
 ```
-#安装规则: 选项A（应用于所有项目）
-cp -r everything-claude-code/rules/* ~/.claude/rules/
-# 选项B：项目级规则（仅应用于当前项目）
-mkdir -p .claude/rules
-cp -r everything-claude-code/rules/* .claude/rules/
+  1. 创建 GitHub PAT  
+  访问https://github.com/settings/tokens → Settings → Developer settings → Personal access tokens → Tokens (classic)
 
-#开始使用
-# 尝试一个命令（插件安装使用命名空间形式）
-/everything-claude-code:plan "添加用户认证"
+  创建 token，需要以下权限：
+  - repo (完整仓库访问)
+  - workflow (如果需要 GitHub Actions 集成)
 
-# 手动安装（选项2）使用简短形式：
-# /plan "添加用户认证"
+  2. 在 Claude Code 中设置
+  在终端运行：
+  claude config set github.token YOUR_TOKEN_HERE
+  或者设置环境变量：
+  export GITHUB_TOKEN=YOUR_TOKEN_HERE
 
-# 查看可用命令
-/plugin list everything-claude-code@everything-claude-code
-```
+  3. 或通过 /install-github-app 时输入
+  再次运行 /install-github-app，会提示输入 API key。
 
- 你现在可以使用 13 个代理、43 个技能和 31 个命令。
+  ---
+  注意：错误信息 "API key is required" 说明 Claude Code 没有找到 GitHub token。建议用环境变量方式，在 .bashrc 或 .zshrc
+  中永久设置：
 
-关注重点配置：
-
-```
-agents/           # 用于委托的专业子代理
-   |-- planner.md           # 功能实现规划
-   |-- architect.md         # 系统设计决策
-   |-- tdd-guide.md         # 测试驱动开发
-   |-- code-reviewer.md     # 质量和安全审查
-   |-- security-reviewer.md # 漏洞分析
-   |-- refactor-cleaner.md  # 死代码清理
-   |-- doc-updater.md       # 文档同步
-   |-- go-reviewer.md       # Go 代码审查（新增）
-   |-- go-build-resolver.md # Go 构建错误解决（新增）
-skills/           # 工作流定义和领域知识
-   |-- coding-standards/           # 语言最佳实践
-   |-- backend-patterns/           # API、数据库、缓存模式
-   |-- continuous-learning/        # 从会话中自动提取模式（详细指南）
-   |-- continuous-learning-v2/     # 基于直觉的学习与置信度评分
-   |-- iterative-retrieval/        # 子代理的渐进式上下文细化
-   |-- strategic-compact/          # 手动压缩建议（详细指南）
-   |-- tdd-workflow/               # TDD 方法论
-   |-- verification-loop/          # 持续验证（详细指南）
-   |-- cpp-testing/                # C++ 测试模式、GoogleTest、CMake/CTest（新增）
-rules/            # 始终遵循的指南
-   |-- security.md         # 强制性安全检查
-   |-- coding-style.md     # 不可变性、文件组织
-   |-- testing.md          # TDD、80% 覆盖率要求
-   |-- git-workflow.md     # 提交格式、PR 流程
-   |-- agents.md           # 何时委托给子代理
-   |-- performance.md      # 模型选择、上下文管理
-contexts/         # 动态系统提示注入上下文（详细指南）
-  |-- dev.md              # 开发模式上下文
-  |-- review.md           # 代码审查模式上下文
-  |-- research.md         # 研究/探索模式上下文
+  echo 'export GITHUB_TOKEN=your_token_here' >> ~/.bashrc
+  source ~/.bashrc
+  设置后再运行 /install-github-app。
 ```
 
 
@@ -193,6 +142,7 @@ contexts/         # 动态系统提示注入上下文（详细指南）
 1、Research：深度阅读 每次任务前，要求 AI 深读相关代码，将发现写入 research.md。Prompt 中 "deeply"、"in great details" 是必要信号，缺了 AI 就浅尝辄止。写成文件是为了建立审查面——AI 编码中最昂贵的失败不是 bug，而是脱离上下文的正确实现。 
 
 2、Plan：结构化规划 审阅 research 后，让 AI 生成 plan.md，含方法论、代码片段、文件路径、权衡考量。不用内置 Plan Mode，Markdown 文件可自由编辑且持久存在。有开源参考实现时一并提供，AI 输出质量会显著提升。 
+
 提升做法：先让一个 Claude 写出计划，然后启动第二个 Claude，让它代入**Staff Engineer**（资深工程师）的角色来对计划进行 Review。
 
 3、Annotate：注释循环（核心） 在 plan 文档中直接添加行内注释，让 AI 据此更新，反复 1-6 轮。注释可以是两个字 "not optional"，也可以是整段业务约束或结构重定向。每次必须附加 "don't implement yet"，否则 AI 会擅自动手。 Markdown 文件充当人与 AI 的共享可变状态，比在聊天中来回指导高效得多。AI 擅长理解代码和写实现，但不知道你的产品优先级和工程权衡底线——注释循环就是注入判断力的通道。
@@ -201,7 +151,11 @@ contexts/         # 动态系统提示注入上下文（详细指南）
 
 ## 提案生成
 
-语音转录倾倒需求，图形页面问关键问题，生成详细实施计划，绕过权限自动构建，配置SuperBase+stripe
+语音转录倾倒需求，图形页面问关键问题，生成详细实施计划，绕过权限自动构建，配置SuperBase(数据库mcp)+stripe(一种通过 MCP (Model Context Protocol) 连接的智能代理工具，旨在帮助开发者快速集成、测试和维护 Stripe 支付系统)
+
+```
+运行以下命令：claude mcp add --transport http stripe https://mcp.stripe.com/
+```
 
 
 
@@ -354,6 +308,145 @@ Claude 会像执行内置命令一样执行它们。
 
 
 
+## 插件
+
+插件（Plugin）是 Claude Code 中**最高级别的扩展机制**，用于将命令、代理、Skills、钩子、MCP、LSP 等能力**打包、版本化、共享和分发**。 个人感觉 插件和skill会发挥越来越重要的作用。
+
+### 插件的最小结构（必须记住）
+
+```
+my-plugin/
+├── .claude-plugin/
+│   └── plugin.json     # 插件清单（必需）
+├── commands/           # 斜杠命令
+├──   └── command1.md
+├── agents/             # 子代理
+├── skills/             # Skills
+├── hooks/              # 钩子
+├── .mcp.json           # MCP 配置
+└── .lsp.json           # LSP 配置
+```
+
+| 能力     | 用途                                                  |
+| :------- | :---------------------------------------------------- |
+| Commands | 自定义斜杠命令                                        |
+| Agents   | 专用子代理，比如代码审查代理、性能测试代理            |
+| Skills   | 教会 Claude 何时用某种能力，比如 PDF 解析、数据可视化 |
+| Hooks    | 自动化（写完文件后执行命令等）                        |
+| MCP      | 连接外部服务（GitHub、DB、API）                       |
+| LSP      | 代码智能（跳转、类型检查）                            |
+
+使用的时候：
+
+```
+/my-first-plugin:command1
+```
+
+### 本地测试插件（开发必会）
+
+使用 `--plugin-dir` 直接加载插件目录， 支持同时加载多个插件
+
+```
+claude --plugin-dir ./my-plugin
+```
+
+### 插件市场（Plugin Marketplace）
+
+插件通过**市场**分发，本质是一个插件目录仓库。
+
+ **anthropics/skills**：主要文档处理，如pdf，ppt
+
+```
+/plugin marketplace add anthropics/skills
+```
+
+#### everything-claude-code 插件库：
+
+```
+# 添加市场
+/plugin marketplace add affaan-m/everything-claude-code
+# 安装插件
+/plugin install everything-claude-code@everything-claude-code
+```
+
+或者直接添加到你的 `~/.claude/settings.json`：
+
+```
+{
+  "extraKnownMarketplaces": {
+    "everything-claude-code": {
+      "source": {
+        "source": "github",
+        "repo": "affaan-m/everything-claude-code"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "everything-claude-code@everything-claude-code": true
+  }
+}
+```
+
+Claude Code 插件系统不支持通过插件分发 `rules`。你需要手动安装规则：
+
+```
+#安装规则: 选项A（应用于所有项目）
+cp -r everything-claude-code/rules/* ~/.claude/rules/
+# 选项B：项目级规则（仅应用于当前项目）
+mkdir -p .claude/rules
+cp -r everything-claude-code/rules/* .claude/rules/
+
+#开始使用
+# 尝试一个命令（插件安装使用命名空间形式）
+/everything-claude-code:plan "添加用户认证"
+
+# 手动安装（选项2）使用简短形式：
+# /plan "添加用户认证"
+
+# 查看可用命令
+/plugin list everything-claude-code@everything-claude-code
+```
+
+ 你现在可以使用 13 个代理、43 个技能和 31 个命令。
+
+关注重点配置：
+
+```
+agents/           # 用于委托的专业子代理
+   |-- planner.md           # 功能实现规划
+   |-- architect.md         # 系统设计决策
+   |-- tdd-guide.md         # 测试驱动开发
+   |-- code-reviewer.md     # 质量和安全审查
+   |-- security-reviewer.md # 漏洞分析
+   |-- refactor-cleaner.md  # 死代码清理
+   |-- doc-updater.md       # 文档同步
+   |-- go-reviewer.md       # Go 代码审查（新增）
+   |-- go-build-resolver.md # Go 构建错误解决（新增）
+skills/           # 工作流定义和领域知识
+   |-- coding-standards/           # 语言最佳实践
+   |-- backend-patterns/           # API、数据库、缓存模式
+   |-- continuous-learning/        # 从会话中自动提取模式（详细指南）
+   |-- continuous-learning-v2/     # 基于直觉的学习与置信度评分
+   |-- iterative-retrieval/        # 子代理的渐进式上下文细化
+   |-- strategic-compact/          # 手动压缩建议（详细指南）
+   |-- tdd-workflow/               # TDD 方法论
+   |-- verification-loop/          # 持续验证（详细指南）
+   |-- cpp-testing/                # C++ 测试模式、GoogleTest、CMake/CTest（新增）
+rules/            # 始终遵循的指南
+   |-- security.md         # 强制性安全检查
+   |-- coding-style.md     # 不可变性、文件组织
+   |-- testing.md          # TDD、80% 覆盖率要求
+   |-- git-workflow.md     # 提交格式、PR 流程
+   |-- agents.md           # 何时委托给子代理
+   |-- performance.md      # 模型选择、上下文管理
+contexts/         # 动态系统提示注入上下文（详细指南）
+  |-- dev.md              # 开发模式上下文
+  |-- review.md           # 代码审查模式上下文
+  |-- research.md         # 研究/探索模式上下文
+```
+
+
+
 ## 子代理
 
 **子代理**是运行在**独立上下文窗口**中的专用 AI 助手, 用于处理特定类型的任务。
@@ -439,35 +532,96 @@ Analyze code and provide actionable feedback.
 
 
 
+## Skill
 
-
-## Agents Teams模式
-
- 可视化监控：tmux分屏模式， subagents, gitworktrees
-
-配置**statusline**：可以显示上下文状态
-
-```
-/statusline-setup
-```
-
-### 与 Subagents 的区别
-
-| 维度         | 单一 Subagent 模式                                         | Agents Teams (Orchestrator) 模式                             |
-| :----------- | :--------------------------------------------------------- | :----------------------------------------------------------- |
-| **拓扑结构** | **线性/星型**：主 Agent 直接调用 Subagent 处理单一困难块。 | **层级/网状**：存在明确的管理层，多个 Subagents 并行协作。   |
-| **决策逻辑** | 主 Agent 决策“做什么”，Subagent 决策“怎么做”。             | Orchestrator 决策“谁做什么”，Workers 决策“怎么做”，存在双层决策。 |
-| **执行流**   | 往往是串行：Subagent A 完成后，主 Agent 再决定是否调用 B。 | 强调并行：同时派发任务给 A、B、C，大幅缩短总耗时。           |
-| **适用范围** | 解决单一瓶颈（如：某段代码太长理解不了）。                 | 解决系统性任务（如：全栈功能开发、大型重构、多模块分析）。   |
-| **上下文**   | 共享主上下文，容易挤占窗口。                               | Workers 拥有独立上下文窗口，互不污染，Orchestrator 仅保留摘要。 |
-
-
-
-## 推荐Skill
+**行为规范 + 专业知识 + 使用时机的组合**
 
 最好跟AI一起去解决问题之后，把它弄成我自己专属的专用的Skill。
 
-自己写skill：
+### Skill 的最小结构
+
+```
+my-skill/
+└── SKILL.md   （唯一必需）
+```
+
+SKILL.md 基本模板:
+
+```
+---
+name: your-skill-name
+description: What it does and when Claude should use it
+---
+
+# Skill Title
+
+## Instructions
+Clear, concrete, actionable rules.
+
+## Examples
+- Example usage 1
+- Example usage 2
+
+## Guidelines
+- Guideline 1
+- Guideline 2
+```
+
+Skills 支持在内容中插入动态变量：
+
+| 变量                   | 说明                                      |
+| :--------------------- | :---------------------------------------- |
+| `$ARGUMENTS`           | 调用 Skill 时传入的所有参数               |
+| `$ARGUMENTS[N]`        | 按索引访问参数，如 `$ARGUMENTS[0]`        |
+| `$N`                   | 简写方式，如 `$0` 表示第一个参数          |
+| `${CLAUDE_SESSION_ID}` | 当前会话 ID，用于日志、临时文件、关联输出 |
+
+例如：写日志
+
+```
+---
+name: session-logger
+description: 记录当前会话活动
+---
+
+请将以下内容写入日志文件：
+
+logs/${CLAUDE_SESSION_ID}.log
+
+$ARGUMENTS
+```
+
+调用：
+
+```
+/session-logger 用户登录成功
+```
+
+并且skill内容支持python命令
+
+~~~txt
+```python
+from pypdf import PdfReader
+reader = PdfReader("doc.pdf")
+```
+~~~
+
+### 推荐结构:
+
+```
+my-skill/
+├── SKILL.md
+├── reference.md
+├── examples.md    # 存放示例文件
+└── scripts/
+    └── helper.py
+```
+
+Skill也可以作为某个rule执行，如code_format_check_skill, 可以定义规则约束，函数命名等，这样claude写代码会自动注意
+
+
+
+### 推荐skill
 
 ### 1. **planing-with-files** 
 
@@ -508,6 +662,111 @@ frontend-design：前端美化神器，提供专业级UI设计和响应式布局
 code-simplifier：屎山代码终结者，自动简化复杂逻辑，消除冗余代码 
 
 
+
+## Prompts
+
+Claude Code 提供 3 种系统提示自定义方式，满足不同使用需求：
+
+| 标志                     | 行为                 | 适用模式  | 典型用例                     |
+| :----------------------- | :------------------- | :-------- | :--------------------------- |
+| `--system-prompt`        | 替换默认系统提示     | 交互+打印 | 完全自定义 Claude 行为指令   |
+| `--system-prompt-file`   | 从文件加载提示并替换 | 仅打印    | 团队共享提示模板、版本控制   |
+| `--append-system-prompt` | 追加内容到默认提示   | 交互+打印 | 保留默认功能，添加个性化指令 |
+
+#### 使用场景与示例
+
+1. **`--system-prompt`**：完全接管系统提示，清空默认指令
+
+   ```
+   claude --system-prompt "You are a Python expert who only writes type-annotated code"
+   ```
+
+2. **`--system-prompt-file`**：从文件读取提示，适合标准化场景
+
+   ```
+   claude -p --system-prompt-file ./prompts/code-review.txt "Review this PR"
+   ```
+
+3. **`--append-system-prompt`**：保留默认功能，追加定制要求（推荐大多数场景使用）
+
+   ```
+   claude --append-system-prompt "Always use TypeScript and include JSDoc comments"
+   ```
+
+## Model
+
+Sonnet 可以很好地处理大多数编码任务。Opus 为复杂的架构决策提供更强的推理能力。在会话期间使用 `/model` 切换或使用 `claude --model <name>` 启动。
+
+| 模型          | 公司       | 主要侧重点    | 核心优势                         | 适合场景          |
+| ------------- | ---------- | ------------- | -------------------------------- | ----------------- |
+| GPT-5         | OpenAI     | 通用智能      | 推理 + 编码 + Agent生态最强      | AI Agent / Coding |
+| Claude 4.5    | Anthropic  | 推理 + Coding | 代码质量高，长上下文，文笔最细腻 | 软件开发          |
+| Gemini 3 Pro  | Google     | 多模态        | 理解视频、音频的能力最强         | 多模态应用        |
+| LLaMA 3 / 4   | Meta       | 开源生态      | 私有部署能力强                   | 企业AI            |
+| Mistral Large | Mistral AI | 高性能开源    | 性价比高                         | 本地推理          |
+| Grok 3        | xAI        | 实时互联网    | 信息更新快,语调幽默              | 社交数据分析      |
+| Command R+    | Cohere     | 企业RAG       | 知识库结合                       | 企业问答          |
+
+国产模型：
+
+| 模型          | 公司     | 主要侧重点                                    | 核心优势     | 适合场景   |
+| ------------- | -------- | --------------------------------------------- | ------------ | ---------- |
+| Qwen          | 阿里巴巴 | 开源模型，中英双语极强，长文本处理极稳。      | 开源生态强   | 企业私有AI |
+| DeepSeek      | 深度求索 | 推理 + Coding，**性价比之王**。               | 性能高成本低 | 编程       |
+| 文心 ERNIE    | 百度     | 知识图谱，擅长中国文化、成语及复杂中文语境    | 搜索结合     | AI搜索     |
+| 混元 Hunyuan  | 腾讯     | 游戏 / 社交，在视频生成和中文长文创作上有优势 | 腾讯生态     | 社交AI     |
+| Kimi          | Moonshot | 超长上下文                                    | 1M上下文     | 文档分析   |
+| GLM           | 智谱AI   | 学术模型                                      | 中文理解强   | 教育       |
+| 豆包 Doubao   | 字节     | 产品化                                        | 抖音生态     | 内容生成   |
+| 百川 Baichuan | 百川智能 | 开源，在医疗、搜索增强（RAG）方面有深厚积累。 | 企业模型     | 私有部署   |
+| 讯飞星火      | 科大讯飞 | 语音 + 中文，教育行业垂直知识丰富             | 语音理解     | AI客服     |
+| MiniMax       | MiniMax  | 多模态与情感                                  | 海外增长快   | AI娱乐     |
+
+## Tools
+
+内置工具通常分为四类，每一类代表不同类型的代理能力。
+
+| 类别         | Claude 可以做什么                                  |
+| :----------- | :------------------------------------------------- |
+| **文件操作** | 读取文件、编辑代码、创建新文件、重命名和重新组织   |
+| **搜索**     | 按模式查找文件、使用正则表达式搜索内容、探索代码库 |
+| **执行**     | 运行 shell 命令、启动服务器、运行测试、使用 git    |
+| **网络**     | 搜索网络、获取文档、查找错误消息                   |
+| **代码智能** | 编辑后查看类型错误和警告、跳转到定义、查找引用     |
+
+
+
+## Agents Teams模式(待完善)
+
+ 可视化监控：tmux分屏模式， subagents, gitworktrees
+
+配置**statusline**：可以显示上下文状态
+
+```
+/statusline-setup
+```
+
+### 与 Subagents 的区别
+
+| 维度         | 单一 Subagent 模式                                         | Agents Teams (Orchestrator) 模式                             |
+| :----------- | :--------------------------------------------------------- | :----------------------------------------------------------- |
+| **拓扑结构** | **线性/星型**：主 Agent 直接调用 Subagent 处理单一困难块。 | **层级/网状**：存在明确的管理层，多个 Subagents 并行协作。   |
+| **决策逻辑** | 主 Agent 决策“做什么”，Subagent 决策“怎么做”。             | Orchestrator 决策“谁做什么”，Workers 决策“怎么做”，存在双层决策。 |
+| **执行流**   | 往往是串行：Subagent A 完成后，主 Agent 再决定是否调用 B。 | 强调并行：同时派发任务给 A、B、C，大幅缩短总耗时。           |
+| **适用范围** | 解决单一瓶颈（如：某段代码太长理解不了）。                 | 解决系统性任务（如：全栈功能开发、大型重构、多模块分析）。   |
+| **上下文**   | 共享主上下文，容易挤占窗口。                               | Workers 拥有独立上下文窗口，互不污染，Orchestrator 仅保留摘要。 |
+
+## 远程控制
+
+远程控制将 [claude.ai/code](https://claude.ai/code) 或 Claude 应用（[iOS](https://apps.apple.com/us/app/claude-by-anthropic/id6473753684) 和 [Android](https://play.google.com/store/apps/details?id=com.anthropic.claude)）连接到在您的机器上运行的 Claude Code 会话。在您的办公桌上启动任务，然后从沙发上的手机或另一台计算机上的浏览器继续。
+
+当您在机器上启动远程控制会话时，Claude 会在整个过程中在本地运行，因此没有任何内容会移到云端。使用远程控制，您可以：
+
+- **远程使用您的完整本地环境**：您的文件系统、MCP servers、工具和项目配置都保持可用
+- **同时在两个界面上工作**：对话在所有连接的设备上保持同步，因此您可以从终端、浏览器和手机交替发送消息
+- **应对中断**：如果您的笔记本电脑进入睡眠状态或网络断开，当您的机器重新上线时会话会自动重新连接
+
+完了，需要max 用户， 伤心。。。
 
 ## 相关工具
 

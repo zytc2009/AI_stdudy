@@ -67,11 +67,19 @@ Day14：自我进化：Cron 定时汇报 自我反思日记
 
 
 
+### 阿里开源CoPaw：
+
+阿里开源桌面Agent工具CoPaw，https://copaw.agentscope.io/docs/intro， 支持本地和云托管，数据全部在本地
 
 
-NanoClaw
 
-EasyClaw
+### OpenFang  开源，rust编写
 
-NextClaw
+https://github.com/RightNow-AI/openfang
+
+比 OpenClaw 轻很多，一般配置的电脑跑起来没什么负担，但是又比 ZeroClaw 功能丰富得多。
+
+
+
+### NanoClaw
 

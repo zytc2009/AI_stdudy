@@ -676,7 +676,11 @@ my-skill/
 
 Skill也可以作为某个rule执行，如code_format_check_skill, 可以定义规则约束，函数命名等，这样claude写代码会自动注意
 
+###  使用捆绑 skills
 
+- **`/simplify`**：审查你最近更改的文件以查找代码重用、质量和效率问题，然后修复它们。在实现功能或错误修复后运行它来清理你的工作。它并行生成三个审查代理（代码重用、代码质量、效率），汇总他们的发现，并应用修复。传递可选文本以专注于特定问题：`/simplify focus on memory efficiency`。
+- **`/batch <instruction>`**：在代码库中并行编排大规模更改。提供更改的描述，`/batch` 研究代码库，将工作分解为 5 到 30 个独立单元，并提出计划供你批准。批准后，它为每个单元生成一个后台代理，每个都在隔离的 [git worktree](https://code.claude.com/docs/zh-CN/common-workflows#run-parallel-claude-code-sessions-with-git-worktrees) 中。每个代理实现其单元、运行测试并打开拉取请求。需要 git 存储库。示例：`/batch migrate src/ from Solid to React`。
+- **`/debug [description]`**：通过读取会话调试日志来排查你当前的 Claude Code 会话。可选地描述问题以专注分析。
 
 ### 推荐skill
 
